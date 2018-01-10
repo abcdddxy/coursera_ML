@@ -26,14 +26,20 @@ sigma = zeros(1, size(X, 2));
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
 
+m = length(X);
+sum = zeros(1, size(X, 2));
 
+for i = 1:m
+	for j = 1:size(X, 2)
+		sum(j) = sum(j) + X(i, j);
+	end
+end
 
-
-
-
-
-
+mu = sum / m;
+sigma = std(sum);
+X_norm = (X - mu) ./ sigma;
 
 % ============================================================
+
 
 end
