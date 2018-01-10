@@ -36,7 +36,7 @@ for i = 1:m
 end
 
 mu = sum / m;
-sigma = std(sum);
+sigma = std(X);
 X_norm = (X - mu) ./ sigma;
 
 % ============================================================
