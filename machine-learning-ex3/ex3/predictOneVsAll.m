@@ -30,7 +30,7 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
-result = X * all_theta'; %5000*401 * 401*10 = 5000*10
+result = X * all_theta'; % 5000*401 * 401*10 = 5000*10
 
 [a, p] = max(result, [], 2);
 
