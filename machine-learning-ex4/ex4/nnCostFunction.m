@@ -62,23 +62,53 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+%forward propagration
+Y = zeros(m, num_labels); %5000*10
 
+for i = 1:m
+	a = zeros(1, num_labels);
+	a(y(i)) = 1;
+	Y(i, :) = a;
+end
 
+X1 = [ones(m, 1), X]; %input:5000*401
+X2 = [ones(m, 1), sigmoid(X1 * Theta1')]; %hidden:5000*26
+X3 = sigmoid(X2 * Theta2'); %output:5000*10
 
+reg = sum(sum(Theta1(:, 2:end) .* Theta1(:, 2:end))) + sum(sum(Theta2(:, 2:end) .* Theta2(:, 2:end)));
 
+cost = -Y .* log(X3) - (1 - Y) .* log(1 - X3);
+J = sum(cost(:)) / m + (lambda * reg)/(2 * m);
 
+%backward propagration
+Delta_1 = zeros(size(Theta1));
+Delta_2 = zeros(size(Theta2));
 
+a1 = X; %5000*400
+z2 = [ones(m, 1), X] * Theta1'; %5000*25
+a2 = sigmoid(z2); %5000*25
+z3 = [ones(m, 1), a2] * Theta2'; %5000*10
+a3 = sigmoid(z3); %5000*10
 
+for i = 1:m
+	a_1 = X(i, :)'; %400*1
+	z_2 = Theta1 * [1; a_1]; %25*401 * 401*1
+	a_2 = sigmoid(z_2); %25*1
+	z_3 = Theta2 * [1; a_2]; %10*26 * 26*1
+	a_3 = sigmoid(z_3); %10*1
 
+   	delta_3 = (a_3 - Y(i, :)'); %10*1
+	delta_2 = (Theta2' * delta_3); %26*10 * 10*1
+	delta_2 = delta_2(2:end) .* sigmoidGradient(z_2); %25*1 .* 25*1
 
+	Delta_2 = Delta_2 + delta_3 * [1; a_2]'; %10*1 * 1*26
+	Delta_1 = Delta_1 + delta_2 * [1; a_1]'; %25*1 * 1*401
+end
 
-
-
-
-
-
-
-
+Theta1_temp = [zeros(size(Theta1,1),1), Theta1(:,2:end)];
+Theta2_temp = [zeros(size(Theta2,1),1), Theta2(:,2:end)];
+Theta1_grad = (1 / m) * Delta_1 + (lambda / m) * Theta1_temp;
+Theta2_grad = (1 / m) * Delta_2 + (lambda / m) * Theta2_temp;
 
 % -------------------------------------------------------------
 
