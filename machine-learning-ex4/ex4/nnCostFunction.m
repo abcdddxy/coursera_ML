@@ -62,23 +62,28 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+%前向传递，计算代价函数(forward propagation)
+y1 = zeros(m, num_labels); %5000*10
 
+for i = 1:m
+    a = zeros(1, num_labels);
+    a(y(i)) = 1;
+    y1(i, :) = a;
+end
 
+X1 = [ones(m, 1), X]; %输入层：5000*401
+X2 = [ones(m, 1), sigmoid(X1 * Theta1')]; %隐藏层：5000*26
+X3 = sigmoid(X2 * Theta2'); %输出层：5000*10
 
+reg = sum(sum(Theta1(:, 2:end) .* Theta1(:, 2:end))) + sum(sum(Theta2(:, 2:end) .* Theta2(:, 2:end)));
 
+cost = -y1 .* log(X3) - (1 - y1) .* log(1 - X3); %10*5000 * 5000*10
+J = sum(cost(:)) / m + (lambda * reg) / (2 * m);
 
-
-
-
-
-
-
-
-
-
-
-
-
+%后向传递，计算梯度(backword propagation)
+Delta3 = (X3 - y1); %5000*10
+Delta2 = (Theta2' * Delta3') .* (X2 .* (1 - X2)); %26*10 * 10*5000 .* 26*5000
+Delta1 = (Theta1' * Delta2') .* (X1 .* (1 - X1)); %401*25 * 25*5000 .* 401*5000
 
 % -------------------------------------------------------------
 
