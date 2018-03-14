@@ -26,12 +26,19 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
+num = zeros(K, 1);
+sim_K = zeros(K, size(X, 2));
 
+for i = 1:size(X, 1)
+    for j = 1:size(X, 2)
+        sim_K(idx(i), j) = sim_K(idx(i), j) + X(i, j);
+    end
+    num(idx(i)) = num(idx(i)) + 1;
+end
 
-
-
-
-
+for i = 1:K
+    centroids(i, :) = sim_K(i, :) / num(i);
+end
 
 % =============================================================
 

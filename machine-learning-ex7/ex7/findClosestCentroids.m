@@ -21,11 +21,18 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
+centroids; %3*2
+dis = zeros(size(centroids, 1), 1);
 
-
-
-
-
+for i = 1:size(X, 1)
+    for j = 1:size(centroids, 1)
+        for k = 1:size(centroids, 2)
+            dis(j) = dis(j) + (X(i, k) - centroids(j, k)) ^ 2;
+        end
+    end
+    [a, idx(i)] = min(dis);
+    dis = zeros(size(centroids, 1), 1);
+end
 
 % =============================================================
 
